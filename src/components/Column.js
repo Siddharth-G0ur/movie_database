@@ -5,7 +5,7 @@ import * as _ from "radash";
 import { Droppable } from "../primitives";
 import { DraggableComponent } from "./DraggableComponent";
 
-export const Column = ({ heading, elements, handleClick }) => {
+export const Column = ({ heading, elements, handleClick, handleShow }) => {
   const columnIdentifier = useMemo(() => _.camel(heading), [heading]); //camal
 
   const amounts = useMemo(
@@ -17,7 +17,10 @@ export const Column = ({ heading, elements, handleClick }) => {
     <ColumnWrapper>
       <ColumnHeaderWrapper variant="headerColor">
         <Heading>{heading}</Heading>
-        <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
+        <ColumnItems>
+          <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
+          <ColumnTasksAmout>+</ColumnTasksAmout>
+        </ColumnItems>
       </ColumnHeaderWrapper>
       <Droppable id={columnIdentifier}>
         {elements.map((elm, elmIndex) => (
@@ -27,6 +30,7 @@ export const Column = ({ heading, elements, handleClick }) => {
             identifier={elm.id}
             content={elm.content}
             handleClick={handleClick}
+            handleShow={handleShow}
           />
         ))}
         <DropPlaceholder />
@@ -42,9 +46,9 @@ const Heading = styled("h3", {
 const ColumnWrapper = styled("div", {
   width: 320,
   padding: 10,
-  border: "dashed",
   borderWidth: 2,
   borderRadius: 10,
+  backgroundColor: "#CBC3E3",
 });
 
 const DropPlaceholder = styled("div", {
@@ -67,6 +71,14 @@ const ColumnHeaderWrapper = styled("div", {
   },
   padding: "0px 10px 0px 10px",
   borderRadius: 10,
+  marginBottom: "10px",
+});
+
+const ColumnItems = styled("span", {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
 });
 
 const ColumnTasksAmout = styled("span", {
@@ -81,4 +93,5 @@ const ColumnTasksAmout = styled("span", {
   boxShadow: "0 8px 32px 0 rgba( 255, 255, 255, 0.18 )",
   backdropFilter: "blur(5px)",
   border: "1px solid rgba( 255, 255, 255, 0.18 )",
+  margin: "0px 5px 0px 5px",
 });

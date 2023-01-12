@@ -5,52 +5,49 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-modal-video/scss/modal-video.scss";
-import ModalVideo from "react-modal-video";
 
 export const DraggableComponent = ({
   identifier,
   content,
   title,
   handleClick,
+  handleShow,
 }) => {
   const itemIdentifier = useMemo(() => identifier, [identifier]);
   const ref = useRef(null); //ADD THIS
 
   return (
-    <div>
-      <Card style={{ width: "18rem" }}>
-        <Draggable id={itemIdentifier} ref={ref}>
-          <Card.Body>
-            <Card.Title>{title}</Card.Title>
-            <Card.Text>{content}</Card.Text>
-          </Card.Body>
-        </Draggable>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Button variant="outline-primary" size="lg">
-            Edit
-          </Button>
-          <Button variant="outline-primary" size="lg" onClick={handleClick}>
-            Play
-          </Button>
+    <Card style={{ width: "18rem", marginBottom: "10px" }}>
+      <Draggable id={itemIdentifier} ref={ref}>
+        <Card.Body>
+          <Card.Title>{title}</Card.Title>
+          <Card.Text>{content}</Card.Text>
+        </Card.Body>
+      </Draggable>
+      <ElementWrapper>
+        <Button variant="outline-secondary" onClick={handleShow}>
+          Edit
+        </Button>
+        <Button
+          size="lg"
+          onClick={handleClick}
+          style={{ background: "#5800FF" }}
+        >
+          Play
+        </Button>
 
-          <Button variant="outline-primary" size="lg">
-            Delete
-          </Button>
-        </div>
-      </Card>
-    </div>
+        <Button variant="outline-danger" size="lg">
+          Delete
+        </Button>
+      </ElementWrapper>
+    </Card>
   );
 };
 
 const ElementWrapper = styled("div", {
-  background: "#f6f6f6",
-  borderRadius: 10,
-  height: 120,
-  width: "100%",
   display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginTop: 12,
+  justifyContent: "space-between",
+  margin: "10px",
 });
 
 const ElementText = styled("h3", {
