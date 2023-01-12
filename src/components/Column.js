@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { styled } from "@stitches/react";
 import * as _ from "radash";
 import PropTypes from "prop-types";
 import { Droppable } from "../primitives";
-import { DraggableComponent } from "./DraggableComponent";
+import DraggableComponent from "./DraggableComponent";
 import { connect } from "react-redux";
 
 const Column = ({
@@ -17,10 +17,7 @@ const Column = ({
 }) => {
   const columnIdentifier = useMemo(() => _.camel(heading), [heading]);
 
-  const amounts = useMemo(
-    () => card.filter((elm) => elm.column === columnIdentifier).length,
-    [card, columnIdentifier]
-  );
+  const amounts = card.filter((elm) => elm.column === columnIdentifier).length;
 
   return (
     <ColumnWrapper>
@@ -28,24 +25,30 @@ const Column = ({
         <Heading>{heading}</Heading>
         <ColumnItems>
           <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
-          <ColumnTasksAmout onClick={handleCreateShow}>+</ColumnTasksAmout>
+          <ColumnTasksAmout onClick={() => handleCreateShow(columnIdentifier)}>
+            +
+          </ColumnTasksAmout>
         </ColumnItems>
       </ColumnHeaderWrapper>
       <Droppable id={columnIdentifier}>
-        {card
-          .filter((elm) => elm.column === columnIdentifier)
-          .map((elm, elmIndex) => (
-            <DraggableComponent
-              key={`draggable-element-${elmIndex}-${columnIdentifier}`}
-              title={elm.title}
-              identifier={elm.id}
-              content={elm.content}
-              handleClick={handleClick}
-              handleShow={handleShow}
-              id={elm.id}
-              handleEdit={handleEdit}
-            />
-          ))}
+        {card !== null &&
+          card.length > 0 &&
+          card.map((elm, elmIndex) => {
+            if (elm.column === columnIdentifier) {
+              return (
+                <DraggableComponent
+                  key={`draggable-element-${elmIndex}-${columnIdentifier}`}
+                  title={elm.title}
+                  identifier={elm.id}
+                  content={elm.description}
+                  handleClick={handleClick}
+                  handleShow={handleShow}
+                  id={elm.id}
+                  handleEdit={handleEdit}
+                />
+              );
+            }
+          })}
         <DropPlaceholder />
       </Droppable>
     </ColumnWrapper>

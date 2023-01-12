@@ -6,19 +6,19 @@ import { addCard } from "../actions/card";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const CreateModal = ({ show, onHide, addCard }) => {
+const CreateModal = ({ show, onHide, addCard, headingName }) => {
   const [formData, setFormData] = useState({
     title: "",
     link: "",
     description: "",
-    column: "educational",
   });
 
   const { title, link, description } = formData;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    formData.column = headingName;
+    console.log(headingName);
     addCard(formData);
     onHide();
   };

@@ -18,7 +18,6 @@ const EditModal = ({ show, onHide, editCard, id }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     formData.id = id;
-    console.log(formData);
     editCard(formData);
     onHide();
   };
