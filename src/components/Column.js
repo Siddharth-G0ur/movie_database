@@ -1,16 +1,25 @@
 import { useMemo } from "react";
 import { styled } from "@stitches/react";
 import * as _ from "radash";
-
+import PropTypes from "prop-types";
 import { Droppable } from "../primitives";
 import { DraggableComponent } from "./DraggableComponent";
+import { connect } from "react-redux";
 
-export const Column = ({ heading, elements, handleClick, handleShow }) => {
-  const columnIdentifier = useMemo(() => _.camel(heading), [heading]); //camal
+const Column = ({
+  heading,
+  //   elements,
+  handleClick,
+  handleShow,
+  handleCreateShow,
+  handleEdit,
+  card,
+}) => {
+  const columnIdentifier = useMemo(() => _.camel(heading), [heading]);
 
   const amounts = useMemo(
-    () => elements.filter((elm) => elm.column === columnIdentifier).length,
-    [elements, columnIdentifier]
+    () => card.filter((elm) => elm.column === columnIdentifier).length,
+    [card, columnIdentifier]
   );
 
   return (
@@ -19,20 +28,24 @@ export const Column = ({ heading, elements, handleClick, handleShow }) => {
         <Heading>{heading}</Heading>
         <ColumnItems>
           <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
-          <ColumnTasksAmout>+</ColumnTasksAmout>
+          <ColumnTasksAmout onClick={handleCreateShow}>+</ColumnTasksAmout>
         </ColumnItems>
       </ColumnHeaderWrapper>
       <Droppable id={columnIdentifier}>
-        {elements.map((elm, elmIndex) => (
-          <DraggableComponent
-            key={`draggable-element-${elmIndex}-${columnIdentifier}`}
-            title={elm.title}
-            identifier={elm.id}
-            content={elm.content}
-            handleClick={handleClick}
-            handleShow={handleShow}
-          />
-        ))}
+        {card
+          .filter((elm) => elm.column === columnIdentifier)
+          .map((elm, elmIndex) => (
+            <DraggableComponent
+              key={`draggable-element-${elmIndex}-${columnIdentifier}`}
+              title={elm.title}
+              identifier={elm.id}
+              content={elm.content}
+              handleClick={handleClick}
+              handleShow={handleShow}
+              id={elm.id}
+              handleEdit={handleEdit}
+            />
+          ))}
         <DropPlaceholder />
       </Droppable>
     </ColumnWrapper>
@@ -95,3 +108,12 @@ const ColumnTasksAmout = styled("span", {
   border: "1px solid rgba( 255, 255, 255, 0.18 )",
   margin: "0px 5px 0px 5px",
 });
+
+Column.propTypes = {
+  card: PropTypes.array.isRequired,
+};
+const mapStateToProps = (state) => ({
+  card: state.card,
+});
+
+export default connect(mapStateToProps)(Column);

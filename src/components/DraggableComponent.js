@@ -12,20 +12,29 @@ export const DraggableComponent = ({
   title,
   handleClick,
   handleShow,
+  id,
+  handleEdit,
 }) => {
   const itemIdentifier = useMemo(() => identifier, [identifier]);
-  const ref = useRef(null); //ADD THIS
-
+  const onClick = () => {
+    handleShow();
+    handleEdit(id);
+  };
   return (
     <Card style={{ width: "18rem", marginBottom: "10px" }}>
-      <Draggable id={itemIdentifier} ref={ref}>
+      <Draggable id={itemIdentifier}>
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>
         </Card.Body>
       </Draggable>
       <ElementWrapper>
-        <Button variant="outline-secondary" onClick={handleShow}>
+        <Button
+          variant="outline-secondary"
+          onClick={() => {
+            onClick();
+          }}
+        >
           Edit
         </Button>
         <Button

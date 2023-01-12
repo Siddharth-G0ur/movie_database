@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { editCard } from "../actions/card";
+import { addCard } from "../actions/card";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-const EditModal = ({ show, onHide, editCard, id }) => {
+const CreateModal = ({ show, onHide, addCard }) => {
   const [formData, setFormData] = useState({
     title: "",
     link: "",
     description: "",
+    column: "educational",
   });
 
   const { title, link, description } = formData;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    formData.id = id;
     console.log(formData);
-    editCard(formData);
+    addCard(formData);
     onHide();
   };
 
@@ -31,7 +31,7 @@ const EditModal = ({ show, onHide, editCard, id }) => {
     <div>
       <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Card</Modal.Title>
+          <Modal.Title>Add Card</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -85,8 +85,8 @@ const EditModal = ({ show, onHide, editCard, id }) => {
   );
 };
 
-EditModal.prototype = {
-  editCard: PropTypes.func.isRequired,
+CreateModal.prototype = {
+  addCard: PropTypes.func.isRequired,
 };
 
-export default connect(null, { editCard })(EditModal);
+export default connect(null, { addCard })(CreateModal);
