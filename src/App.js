@@ -1,7 +1,6 @@
-import { useCallback, useState } from "react";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { useState } from "react";
+import { DndContext } from "@dnd-kit/core";
 import { styled } from "@stitches/react";
-import * as _ from "radash";
 import Column from "./components/Column";
 import "react-modal-video/scss/modal-video.scss";
 import ModalVideo from "react-modal-video";
@@ -65,11 +64,12 @@ const App = ({ card, column, columnUpdate, moveToHistory }) => {
             {column.map((column, columnIndex) => (
               <Column
                 key={`column-${columnIndex}`}
-                heading={column}
+                heading={column.column}
                 handleClick={handleClick}
                 handleShow={handleShow}
                 handleCreateShow={handleCreateShow}
                 handleEdit={handleEdit}
+                columnId={column.id}
               />
             ))}
           </MainWrapper>

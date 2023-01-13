@@ -1,57 +1,72 @@
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { styled } from "@stitches/react";
 import * as _ from "radash";
 import PropTypes from "prop-types";
 import { Droppable } from "../primitives";
 import DraggableComponent from "./DraggableComponent";
 import { connect } from "react-redux";
+import { removeColumn } from "../actions/column";
+import Alert from "react-bootstrap/Alert";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Column = ({
   heading,
-  //   elements,
   handleClick,
   handleShow,
   handleCreateShow,
   handleEdit,
   card,
+  removeColumn,
+  columnId,
 }) => {
   const columnIdentifier = useMemo(() => _.camel(heading), [heading]);
 
   const amounts = card.filter((elm) => elm.column === columnIdentifier).length;
-
+  const handleDelete = () => {
+    if (heading === "History") {
+      alert("You cannot delete History");
+    } else {
+      removeColumn(columnId);
+    }
+  };
   return (
-    <ColumnWrapper>
-      <ColumnHeaderWrapper variant="headerColor">
-        <Heading>{heading}</Heading>
-        <ColumnItems>
-          <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
-          <ColumnTasksAmout onClick={() => handleCreateShow(columnIdentifier)}>
-            +
-          </ColumnTasksAmout>
-        </ColumnItems>
-      </ColumnHeaderWrapper>
-      <Droppable id={columnIdentifier}>
-        {card !== null &&
-          card.length > 0 &&
-          card.map((elm, elmIndex) => {
-            if (elm.column === columnIdentifier) {
-              return (
-                <DraggableComponent
-                  key={`draggable-element-${elmIndex}-${columnIdentifier}`}
-                  title={elm.title}
-                  identifier={elm.id}
-                  content={elm.description}
-                  handleClick={handleClick}
-                  handleShow={handleShow}
-                  id={elm.id}
-                  handleEdit={handleEdit}
-                />
-              );
-            }
-          })}
-        <DropPlaceholder />
-      </Droppable>
-    </ColumnWrapper>
+    <>
+      <ColumnWrapper>
+        <ColumnHeaderWrapper variant="headerColor">
+          <Heading>{heading}</Heading>
+          <ColumnItems>
+            <ColumnTasksAmout>{amounts}</ColumnTasksAmout>
+            <ColumnTasksAmout
+              onClick={() => handleCreateShow(columnIdentifier)}
+            >
+              +
+            </ColumnTasksAmout>
+            <ColumnTasksAmout onClick={handleDelete}>-</ColumnTasksAmout>
+          </ColumnItems>
+        </ColumnHeaderWrapper>
+        <Droppable id={columnIdentifier}>
+          {card !== null &&
+            card.length > 0 &&
+            card.map((elm, elmIndex) => {
+              if (elm.column === columnIdentifier) {
+                return (
+                  <DraggableComponent
+                    key={`draggable-element-${elmIndex}-${columnIdentifier}`}
+                    title={elm.title}
+                    identifier={elm.id}
+                    content={elm.description}
+                    handleClick={handleClick}
+                    handleShow={handleShow}
+                    id={elm.id}
+                    handleEdit={handleEdit}
+                  />
+                );
+              }
+            })}
+          <DropPlaceholder />
+        </Droppable>
+      </ColumnWrapper>
+    </>
   );
 };
 
@@ -114,9 +129,10 @@ const ColumnTasksAmout = styled("span", {
 
 Column.propTypes = {
   card: PropTypes.array.isRequired,
+  removeColumn: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   card: state.card,
 });
 
-export default connect(mapStateToProps)(Column);
+export default connect(mapStateToProps, { removeColumn })(Column);

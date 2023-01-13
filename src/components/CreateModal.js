@@ -18,7 +18,6 @@ const CreateModal = ({ show, onHide, addCard, headingName }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     formData.column = headingName;
-    console.log(headingName);
     addCard(formData);
     onHide();
   };

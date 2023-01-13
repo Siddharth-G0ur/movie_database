@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import addColumn from "../actions/column";
+import { addColumn } from "../actions/column";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import _default from "react-bootstrap/Form";
 
 const CreateColumnModal = ({ show, onHide, addColumn }) => {
   const [formData, setFormData] = useState({
