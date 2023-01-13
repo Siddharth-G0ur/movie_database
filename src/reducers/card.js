@@ -4,6 +4,7 @@ import {
   EDIT_CARD,
   COLUMN_UPDATE,
   MOVE_TO_HISTORY,
+  GET_CARD_DATA,
 } from "../actions/types";
 const initialState = [];
 
@@ -34,6 +35,8 @@ export default function (state = initialState, action) {
       const history = reqHistoryCard[0];
       history.column = "history";
       return [...notReqHistoryCard, history];
+    case GET_CARD_DATA:
+      return state.filter((card) => card.id === payload);
     default:
       return state;
   }

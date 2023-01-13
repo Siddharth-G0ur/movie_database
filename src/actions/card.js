@@ -4,6 +4,7 @@ import {
   EDIT_CARD,
   COLUMN_UPDATE,
   MOVE_TO_HISTORY,
+  GET_CARD_DATA,
 } from "./types";
 import * as _ from "radash";
 
@@ -31,4 +32,15 @@ const moveToHistory = (id) => (dispatch) => {
   dispatch({ type: MOVE_TO_HISTORY, payload: id });
 };
 
-export { addCard, removeCard, editCard, columnUpdate, moveToHistory };
+const getCardData = (id) => (dispatch) => {
+  dispatch({ type: GET_CARD_DATA, payload: id });
+};
+
+export {
+  addCard,
+  removeCard,
+  editCard,
+  columnUpdate,
+  moveToHistory,
+  getCardData,
+};

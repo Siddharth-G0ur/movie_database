@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { removeColumn } from "../actions/column";
 import Alert from "react-bootstrap/Alert";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { MdLibraryAdd, MdDeleteSweep } from "react-icons/md";
 
 const Column = ({
   heading,
@@ -39,9 +40,11 @@ const Column = ({
             <ColumnTasksAmout
               onClick={() => handleCreateShow(columnIdentifier)}
             >
-              +
+              <MdLibraryAdd />
             </ColumnTasksAmout>
-            <ColumnTasksAmout onClick={handleDelete}>-</ColumnTasksAmout>
+            <ColumnTasksAmout onClick={handleDelete}>
+              <MdDeleteSweep />
+            </ColumnTasksAmout>
           </ColumnItems>
         </ColumnHeaderWrapper>
         <Droppable id={columnIdentifier}>
@@ -59,6 +62,7 @@ const Column = ({
                     handleShow={handleShow}
                     id={elm.id}
                     handleEdit={handleEdit}
+                    link={elm.link}
                   />
                 );
               }

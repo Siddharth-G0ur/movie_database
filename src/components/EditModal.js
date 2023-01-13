@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { editCard } from "../actions/card";
+import { editCard, getCardData } from "../actions/card";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -12,7 +12,6 @@ const EditModal = ({ show, onHide, editCard, id }) => {
     link: "",
     description: "",
   });
-
   const { title, link, description } = formData;
 
   const handleSubmit = (e) => {

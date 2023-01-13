@@ -8,6 +8,7 @@ import "react-modal-video/scss/modal-video.scss";
 import { connect } from "react-redux";
 import { removeCard } from "../actions/card";
 import PropTypes from "prop-types";
+import youtubeThumbnail from "youtube-thumbnail";
 
 const DraggableComponent = ({
   identifier,
@@ -18,6 +19,7 @@ const DraggableComponent = ({
   id,
   handleEdit,
   removeCard,
+  link,
 }) => {
   const itemIdentifier = useMemo(() => identifier, [identifier]);
   const onClick = () => {
@@ -28,9 +30,12 @@ const DraggableComponent = ({
     removeCard(id);
   };
 
+  const img = youtubeThumbnail(link).medium.url;
+
   return (
     <Card style={{ width: "18rem", marginBottom: "10px" }}>
       <Draggable id={itemIdentifier}>
+        <Card.Img variant="top" src={img} />
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Card.Text>{content}</Card.Text>

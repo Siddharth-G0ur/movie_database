@@ -5,3 +5,4 @@ export const COLUMN_UPDATE = "COLUMN_UPDATE";
 export const MOVE_TO_HISTORY = "MOVE_TO_HISTORY";
 export const ADD_COLUMN = "ADD_COLUMN";
 export const REMOVE_COLUMN = "REMOVE_COLUMN";
+export const GET_CARD_DATA = "GET_CARD_DATA";
