@@ -12,17 +12,18 @@ import PropTypes from "prop-types";
 import { columnUpdate } from "./actions/card";
 import getVideoId from "get-video-id";
 import { moveToHistory } from "./actions/card";
+import Button from "react-bootstrap/Button";
+import "bootstrap/dist/css/bootstrap.min.css";
+import CreateColumnModal from "./components/CreateColumnModal";
 
-const COLUMNS = ["Add", "Educational", "Entertainment", "History"];
-const DEFAULT_COLUMN = "educational";
-
-const App = ({ card, columnUpdate, moveToHistory }) => {
+const App = ({ card, column, columnUpdate, moveToHistory }) => {
   const [videoModal, setVideoModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [createModal, setCreateModal] = useState(false);
   const [cardToBeEdited, setCardToBeEdited] = useState();
   const [heading, setHeading] = useState();
   const [videoUrl, setVideoUrl] = useState();
+  const [addColumn, setAddColumn] = useState(false);
 
   const handleClick = (idd) => {
     const reqCard = card.filter((card) => card.id === idd);
@@ -36,6 +37,9 @@ const App = ({ card, columnUpdate, moveToHistory }) => {
   const handleClose = () => setEditModal(false);
   const handleShow = () => setEditModal(true);
 
+  const handleColumnClose = () => setAddColumn(false);
+  const handleColumnShow = () => setAddColumn(true);
+
   const handleCreateClose = () => setCreateModal(false);
   const handleCreateShow = (head) => {
     setHeading(head);
@@ -48,7 +52,6 @@ const App = ({ card, columnUpdate, moveToHistory }) => {
     card.map((elm) => {
       if (elm.id === elementId) {
         const column = over?.id ? String(over.id) : elm.column;
-        console.log(column);
         columnUpdate(elementId, column);
       }
     });
@@ -56,32 +59,40 @@ const App = ({ card, columnUpdate, moveToHistory }) => {
 
   return (
     <>
-      <DndContext onDragEnd={handleOnDragEnd}>
-        <MainWrapper>
-          {COLUMNS.map((column, columnIndex) => (
-            <Column
-              key={`column-${columnIndex}`}
-              heading={column}
-              handleClick={handleClick}
-              handleShow={handleShow}
-              handleCreateShow={handleCreateShow}
-              handleEdit={handleEdit}
-            />
-          ))}
-        </MainWrapper>
-      </DndContext>
-      <ModalVideo
-        channel="youtube"
-        isOpen={videoModal}
-        videoId={videoUrl}
-        onClose={() => setVideoModal(false)}
-      />
-      <EditModal show={editModal} onHide={handleClose} id={cardToBeEdited} />
-      <CreateModal
-        show={createModal}
-        onHide={handleCreateClose}
-        headingName={heading}
-      />
+      <div>
+        <DndContext onDragEnd={handleOnDragEnd}>
+          <MainWrapper>
+            {column.map((column, columnIndex) => (
+              <Column
+                key={`column-${columnIndex}`}
+                heading={column}
+                handleClick={handleClick}
+                handleShow={handleShow}
+                handleCreateShow={handleCreateShow}
+                handleEdit={handleEdit}
+              />
+            ))}
+          </MainWrapper>
+        </DndContext>
+        <ModalVideo
+          channel="youtube"
+          isOpen={videoModal}
+          videoId={videoUrl}
+          onClose={() => setVideoModal(false)}
+        />
+        <EditModal show={editModal} onHide={handleClose} id={cardToBeEdited} />
+        <CreateModal
+          show={createModal}
+          onHide={handleCreateClose}
+          headingName={heading}
+        />
+        <CreateColumnModal show={addColumn} onHide={handleColumnClose} />
+      </div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Button variant="outline-primary" size="lg" onClick={handleColumnShow}>
+          Add Category
+        </Button>
+      </div>
     </>
   );
 };
@@ -97,12 +108,14 @@ const MainWrapper = styled("div", {
 
 App.propTypes = {
   card: PropTypes.array.isRequired,
+  column: PropTypes.array.isRequired,
   columnUpdate: PropTypes.func.isRequired,
   moveToHistory: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   card: state.card,
+  column: state.column,
 });
 
 export default connect(mapStateToProps, { columnUpdate, moveToHistory })(App);
